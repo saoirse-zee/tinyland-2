@@ -1,8 +1,9 @@
 import * as React from "react";
 import { useSpring, animated } from "react-spring";
 
-function Blob({ x, y, color = "cornflowerblue" }) {
+function Blob({ x, y }) {
   const pos = useSpring({ x, y });
+  console.log(x, y)
   return (
     <g>
       <filter id="blurMe">
@@ -11,8 +12,9 @@ function Blob({ x, y, color = "cornflowerblue" }) {
       <animated.circle
         cx={pos.x}
         cy={pos.y}
-        r={50}
-        fill={color}
+        r={10}
+        fill="white"
+        opacity={0.8}
         filter="url(#blurMe)"
       />
     </g>

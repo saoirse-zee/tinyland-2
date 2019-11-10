@@ -12,6 +12,8 @@ const udpPort = new osc.UDPPort({
     metadata: true,
 })
 
+const state = {}
+
 udpPort.on('ready', function() {
     wss.on('connection', function connection(ws) {
         console.log('a browser connected')
@@ -25,16 +27,28 @@ udpPort.on('ready', function() {
             console.log('received: %s', message);
         });
 
+        // 1. Receive bundles of data about the physical world
         udpPort.on('bundle', function(bundle) {
             const shape = parseBundle(bundle)
             if (shape) {
-                const msg = JSON.stringify({
-                    type: 'shape',
-                    payload: shape
-                })
-                ws.send(msg)
+                state[shape.id] = {...shape, type: 'shape'}
             }
+            // 2. Run apps
+            // Update state
+    
+            // 3. Send state to React app to be rendered
+            Object.keys(state).forEach(key => {
+                const item = state[key]
+                if (item.type === 'shape') {
+                    const msg = JSON.stringify({
+                        type: 'shape',
+                        payload: item
+                    })
+                    ws.send(msg)
+                }
+            })
         })
+
     });
 })
 

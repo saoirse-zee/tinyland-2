@@ -14,20 +14,24 @@ const ws = new WebSocket(`ws://127.0.0.1:${WS_PORT}`)
 function App() {
     const [isCalibrating, setIsCalibrating] = useState(false)
     const [message, setMessage] = useState('hi')
-    const [shape, setShape] = useState({
-        x: 10,
-        y: 10,
-    })
+    const [things, setThings] = useState({})
 
     useEffect(() => {
         ws.onmessage = (msg) => {
             const data = JSON.parse(msg.data)
-            console.log(data)
             if (data.type === 'string') {
                 setMessage(data.payload)
             }
             if (data.type === 'shape') {
-                setShape(data.payload)
+                const {payload} = data
+                setThings((prevThings) => {
+                    const newThing = {}
+                    newThing[`noob-${payload.id}`] = {
+                        x: payload.x,
+                        y: payload.y,
+                    }
+                    return {...prevThings, ...newThing}
+                })
             }
         }
         ws.onopen = () => {
@@ -35,7 +39,6 @@ function App() {
         }
     })
     const handleToggleCalibration = () => setIsCalibrating(v => !v)
-    
     return (
         <HotKeys
             keyMap={{ TOGGLE_CALIBRATION: "c" }}
@@ -49,13 +52,17 @@ function App() {
                 ) : (
                     <div className="App">
                         <Container width={500} height={200}>
-                            <text x="10" y="10" fill="white">{shape.x * 500}</text>
-                            <text x="10" y="30" fill="white">{shape.y * 200}</text>
-                            <Blob x={shape.x * 500} y={shape.y * 200} />
+                            <text x="10" y="10" fill="white">{Object.keys(things).length} things</text>
+                            {
+                                Object.keys(things).map(id => {
+                                    const thing = things[id]
+                                    return (
+                                        <Blob key={id} x={thing.x * 500} y={thing.y * 200} />
+                                    )
+                                })
+                            }
                         </Container>
                         {message}
-                        <p>x: {shape.x}</p>
-                        <p>y: {shape.y}</p>
                     </div>
                 )
             }
