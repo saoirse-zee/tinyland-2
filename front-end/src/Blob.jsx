@@ -3,7 +3,6 @@ import { useSpring, animated } from "react-spring";
 
 function Blob({ x, y }) {
   const pos = useSpring({ x, y });
-  console.log(x, y)
   return (
     <g>
       <filter id="blurMe">

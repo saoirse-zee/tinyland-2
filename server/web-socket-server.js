@@ -33,8 +33,22 @@ udpPort.on('ready', function() {
             if (shape) {
                 state[shape.id] = {...shape, type: 'shape'}
             }
+            
             // 2. Run apps
-            // Update state
+            // This app just draws a line between "shapes"
+            const thingLine = Object.keys(state)
+            .map(id => {
+                const thing = state[id]
+                return thing
+            })
+            .filter(thing => thing.type === 'shape')
+            .map(shape => [shape.x, shape.y])
+
+            state['line-1'] = {
+                id: 'line-1',
+                type: 'line',
+                data: thingLine
+            }
     
             // 3. Send state to React app to be rendered
             Object.keys(state).forEach(key => {
@@ -42,6 +56,13 @@ udpPort.on('ready', function() {
                 if (item.type === 'shape') {
                     const msg = JSON.stringify({
                         type: 'shape',
+                        payload: item
+                    })
+                    ws.send(msg)
+                }
+                if (item.type === 'line') {
+                    const msg = JSON.stringify({
+                        type: 'line',
                         payload: item
                     })
                     ws.send(msg)

@@ -4,6 +4,7 @@ import './App.css';
 import Container from './Container'
 import Blob from './Blob'
 import calibrationImage from './rectglr_calibration.png'
+import Line from "./Line";
 
 const WebSocket = require('isomorphic-ws')
 
@@ -33,12 +34,24 @@ function App() {
                     return {...prevThings, ...newThing}
                 })
             }
+            if (data.type === 'line') {
+                const {payload} = data
+                setThings((prevThings) => {
+                    const newThing = {}
+                    newThing[payload.id] = {
+                        type: 'line',
+                        points: payload.data,
+                    }
+                    return {...prevThings, ...newThing}
+                })
+            }
         }
         ws.onopen = () => {
             console.log('Connection is open')
         }
     })
     const handleToggleCalibration = () => setIsCalibrating(v => !v)
+    console.log(things)
     return (
         <HotKeys
             keyMap={{ TOGGLE_CALIBRATION: "c" }}
@@ -56,6 +69,12 @@ function App() {
                             {
                                 Object.keys(things).map(id => {
                                     const thing = things[id]
+                                    if (thing.type === 'line') {
+                                        console.log(thing)
+                                        return (
+                                            <Line key={id} points={thing.points.map(pt => pt.map((coord, i) => coord * (i === 0 ? 500 : 200)))} />
+                                        )
+                                    }
                                     return (
                                         <Blob key={id} x={thing.x * 500} y={thing.y * 200} />
                                     )
