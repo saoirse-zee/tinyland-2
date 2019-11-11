@@ -33,6 +33,7 @@ udpPort.on('ready', function() {
             if (shape) {
                 state[shape.id] = {...shape, type: 'shape'}
             }
+            console.log(shape)
             
             // 2. Run apps
             // This app just draws a line between "shapes"
@@ -93,7 +94,11 @@ function parseBundle(bundle) {
         marker.a  = bundle.packets[2].args[5].value
     }
     function isMarker() {
-        return bundle.packets[2].args[0].value === 'set'
+        // All of this checking seems silly. Better way?
+        return bundle.packets &&
+            bundle.packets.length > 0 &&
+            bundle.packets[2] &&
+            bundle.packets[2].args[0].value === 'set'
     }
     return marker.hasOwnProperty('id') && marker 
 }
