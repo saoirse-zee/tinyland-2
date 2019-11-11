@@ -70,14 +70,13 @@ function App() {
                                 Object.keys(things).map(id => {
                                     const thing = things[id]
                                     if (thing.type === 'line') {
-                                        console.log(thing)
                                         return (
                                             <Line key={id} points={thing.points.map(pt => pt.map((coord, i) => coord * (i === 0 ? 500 : 200)))} />
                                         )
                                     }
-                                    return (
-                                        <Blob key={id} x={thing.x * 500} y={thing.y * 200} />
-                                    )
+                                //     return (
+                                //         <Blob key={id} x={thing.x * 500} y={thing.y * 200} />
+                                //     )
                                 })
                             }
                         </Container>
