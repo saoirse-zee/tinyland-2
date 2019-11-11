@@ -1,0 +1,63 @@
+
+* Tinyland
+  
+** What is Tinyland? 
+   A way of exploring Dynamicland.
+
+** Brief overview of tech
+** v1 and v2
+
+** Decoupling "eye", "brain" and "face" - Pros and cons
+   
+
+* Origins
+** Englebart   
+Thought to be a technologist - inventor of the mouse
+Actual mission was to augment human intellect.
+Think in powerful new ways
+Collective solve real human problems
+shared intellectual space
+our computers are single-user
+[[https://www.youtube.com/playlist?list=PL76DBC8D6718B8FD3][Mother of all demos]]
+
+"What world was he trying to create?"
+[[http://dougengelbart.org/content/view/138][Engelbart's intent]]
+"We refer to a way of life in an integrated domain where hunches, cut-and-try, intangibles, and the human "feel for a situation" usefully co-exist with powerful concepts, streamlined terminology and notation, sophisticated methods, and high-powered electronic aids."
+The complexity and urgency of our problems growing exponentially.
+Augmenting human intellect -> enlightened society
+"the little steps that the human can take with his sensory-mental-motor apparatus can be organized cooperatively with the capabilities of artifacts to accomplish significant things in the way of achieving comprehension and solving problems"[[http://www.dougengelbart.org/content/view/138/#3a3][ src]] 
+"the five different types of structuring" <-- Look into this
+
+** Logo, Mindstorm, Turle Geometry  
+   
+   
+* Many mice
+ 
+** Does it even make sense? 
+
+** Continuous time vs Discrete events
+** Not really, because time never stops.
+
+** Maybe we should ask the Mouse Conf folks what they think??
+
+   
+* Realtalk
+** Linda, Datalog, tuplespace
+** My naive implementation
+
+   
+* Future
+** Soft interfaces
+*** Wood, cloth, faux fur
+*** More approachable? Imagining what computers can be.
+** Kids with disabilities
+   
+
+* Demos
+
+** v1: Pong, Orbits, Alchemy
+
+** v2: Receipt printer, dog, recogizing Emma
+
+** Paper programs
+

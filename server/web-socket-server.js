@@ -12,7 +12,34 @@ const udpPort = new osc.UDPPort({
     metadata: true,
 })
 
-const state = {}
+// This app just draws a line between "shapes"
+const thingLine = state => {
+    // Map from shapes to sets of coords (that can later be fed to an svg.)
+    const lineCoords = Object.keys(state)
+        .map(id => {
+            const thing = state[id]
+            return thing
+        })
+        .filter(thing => thing.type === 'shape')
+        .map(shape => [shape.x, shape.y])
+
+    // Add the new line to state
+    state['line-1'] = {
+        id: 'line-1',
+        type: 'line',
+        data: thingLine
+    }
+
+    return state
+}
+
+let state = {
+    'shape-1': {
+        type: 'shape',
+        x: 0.2,
+        y: 0.3,
+    }
+}
 
 udpPort.on('ready', function() {
     wss.on('connection', function connection(ws) {
@@ -29,26 +56,15 @@ udpPort.on('ready', function() {
 
         // 1. Receive bundles of data about the physical world
         udpPort.on('bundle', function(bundle) {
+            console.log(bundle)
             const shape = parseBundle(bundle)
             if (shape) {
                 state[shape.id] = {...shape, type: 'shape'}
             }
             
             // 2. Run apps
-            // This app just draws a line between "shapes"
-            const thingLine = Object.keys(state)
-            .map(id => {
-                const thing = state[id]
-                return thing
-            })
-            .filter(thing => thing.type === 'shape')
-            .map(shape => [shape.x, shape.y])
-
-            state['line-1'] = {
-                id: 'line-1',
-                type: 'line',
-                data: thingLine
-            }
+            state = thingLine(state)
+            console.log(state)
     
             // 3. Send state to React app to be rendered
             Object.keys(state).forEach(key => {
