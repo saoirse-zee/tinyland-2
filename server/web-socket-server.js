@@ -13,7 +13,7 @@ const udpPort = new osc.UDPPort({
 })
 
 // This app just draws a line between "shapes"
-const thingLine = state => {
+const lineApp = state => {
     // Map from shapes to sets of coords (that can later be fed to an svg.)
     const lineCoords = Object.keys(state)
         .map(id => {
@@ -27,7 +27,7 @@ const thingLine = state => {
     state['line-1'] = {
         id: 'line-1',
         type: 'line',
-        data: thingLine
+        data: lineCoords
     }
 
     return state
@@ -56,16 +56,17 @@ udpPort.on('ready', function() {
 
         // 1. Receive bundles of data about the physical world
         udpPort.on('bundle', function(bundle) {
-            console.log(bundle)
             const shape = parseBundle(bundle)
             if (shape) {
                 state[shape.id] = {...shape, type: 'shape'}
             }
-            console.log(shape)
             
             // 2. Run apps
-            state = thingLine(state)
+            state = lineApp(state)
+
             console.log(state)
+            console.log("=======")
+
     
             // 3. Send state to React app to be rendered
             Object.keys(state).forEach(key => {
