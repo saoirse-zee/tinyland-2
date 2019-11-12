@@ -49,23 +49,9 @@ udpPort.on('ready', function() {
                 state = lineApp(state)
             }
 
-            // const lines = Object.keys(state)
-            //     .map(id => state[id])
-            //     .filter(thing => thing.type === 'line')
-            // lines.forEach(l => console.log(l))
-            // console.log("=======")
-
-    
             // 3. Send state to React app to be rendered
             Object.keys(state).forEach(key => {
                 const item = state[key]
-                // if (item.type === 'shape') {
-                //     const msg = JSON.stringify({
-                //         type: 'shape',
-                //         payload: item
-                //     })
-                //     ws.send(msg)
-                // }
                 if (item.type === 'line') {
                     const msg = JSON.stringify({
                         type: 'line',
