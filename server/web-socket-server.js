@@ -12,7 +12,12 @@ const udpPort = new osc.UDPPort({
     metadata: true,
 })
 
-// This app just draws a line between "shapes"
+
+/**
+ * LineApp
+ * ID: 9
+ * Draws a line between "blobs"
+ */
 const lineApp = state => {
     // Map from shapes to sets of coords (that can later be fed to an svg.)
     const lineCoords = Object.keys(state)
@@ -20,8 +25,8 @@ const lineApp = state => {
             const thing = state[id]
             return thing
         })
-        .filter(thing => thing.type === 'marker')
-        .map(shape => [shape.x, shape.y])
+        .filter(thing => thing.type === 'blob')
+        .map(blob => [blob.data[0], blob.data[1]])
 
     // Add the new line to state
     state['line-1'] = {
@@ -33,6 +38,11 @@ const lineApp = state => {
     return state
 }
 
+/**
+ * BlobApp
+ * ID: 7
+ * Draws a blob for each marker
+ */
 const blobApp = state => {
     Object.keys(state).forEach(id => {
         const thing = state[id]
@@ -76,15 +86,18 @@ udpPort.on('ready', function() {
                 .filter(things => things.type === 'marker')
                 .map(marker => marker.id)
 
-            if (activeMarkers.includes(7)) {
-                state = lineApp(state)
-            }
             if (activeMarkers.includes(9)) {
                 state = blobApp(state)
             }
+            if (activeMarkers.includes(7)) {
+                state = lineApp(state)
+            }
 
-            console.log(activeMarkers)
-            console.log("=======")
+            // const lines = Object.keys(state)
+            //     .map(id => state[id])
+            //     .filter(thing => thing.type === 'line')
+            // lines.forEach(l => console.log(l))
+            // console.log("=======")
 
     
             // 3. Send state to React app to be rendered
