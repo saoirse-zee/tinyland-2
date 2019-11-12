@@ -20,7 +20,7 @@ const lineApp = state => {
             const thing = state[id]
             return thing
         })
-        .filter(thing => thing.type === 'shape')
+        .filter(thing => thing.type === 'marker')
         .map(shape => [shape.x, shape.y])
 
     // Add the new line to state
@@ -34,12 +34,17 @@ const lineApp = state => {
 }
 
 const blobApp = state => {
-    // do stuff with blobs
-    state['blob-1'] = {
-        id: 'blob-1',
-        type: 'blob',
-        data: [0.5, 0.5] // Put blob in center of Tinyland
-    }
+    Object.keys(state).forEach(id => {
+        const thing = state[id]
+        if (thing.type === 'marker') {
+            state[`blob-${id}`] = {
+                id: `blob-${id}`,
+                type: 'blob',
+                data: [thing.x, thing.y] // Put blob in center of marker
+            }
+        }
+    })
+    
     return state
 }
 
@@ -61,9 +66,9 @@ udpPort.on('ready', function() {
 
         // 1. Receive bundles of data about the physical world
         udpPort.on('bundle', function(bundle) {
-            const shape = parseBundle(bundle)
-            if (shape) {
-                state[shape.id] = {...shape, type: 'shape'}
+            const marker = parseBundle(bundle)
+            if (marker) {
+                state[marker.id] = {...marker, type: 'marker'}
             }
             
             // 2. Run apps
@@ -77,13 +82,13 @@ udpPort.on('ready', function() {
             // 3. Send state to React app to be rendered
             Object.keys(state).forEach(key => {
                 const item = state[key]
-                if (item.type === 'shape') {
-                    const msg = JSON.stringify({
-                        type: 'shape',
-                        payload: item
-                    })
-                    ws.send(msg)
-                }
+                // if (item.type === 'shape') {
+                //     const msg = JSON.stringify({
+                //         type: 'shape',
+                //         payload: item
+                //     })
+                //     ws.send(msg)
+                // }
                 if (item.type === 'line') {
                     const msg = JSON.stringify({
                         type: 'line',
