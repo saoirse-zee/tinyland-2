@@ -3,6 +3,8 @@ const osc = require('osc')
 const blobApp = require('./apps/blobApp')
 const lineApp = require('./apps/lineApp')
 
+const apps = [blobApp, lineApp]
+
 const WS_PORT = 1234 
 const OSC_PORT = 3333
 
@@ -42,12 +44,12 @@ udpPort.on('ready', function() {
                 .filter(things => things.type === 'marker')
                 .map(marker => marker.id)
 
-            if (activeMarkers.includes(9)) {
-                state = blobApp(state)
-            }
-            if (activeMarkers.includes(7)) {
-                state = lineApp(state)
-            }
+            const activeApps = apps
+                .filter(app => activeMarkers.includes(app.id))
+
+            activeApps.forEach(app => {
+                state = app.code(state)
+            })
 
             // 3. Send state to React app to be rendered
             Object.keys(state).forEach(key => {

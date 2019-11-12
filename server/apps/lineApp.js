@@ -1,9 +1,9 @@
 /**
  * LineApp
- * ID: 9
+ * ID: 7
  * Draws a line between "blobs"
  */
-const lineApp = state => {
+const code = state => {
   // Map from shapes to sets of coords (that can later be fed to an svg.)
   const lineCoords = Object.keys(state)
       .map(id => {
@@ -21,6 +21,12 @@ const lineApp = state => {
   }
 
   return state
+}
+
+const lineApp = {
+  id: 7,
+  name: 'lineApp',
+  code,
 }
 
 module.exports = lineApp

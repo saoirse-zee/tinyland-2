@@ -1,9 +1,9 @@
 /**
  * BlobApp
- * ID: 7
+ * ID: 9
  * Draws a blob for each marker
  */
-const blobApp = state => {
+const code = state => {
   Object.keys(state).forEach(id => {
       const thing = state[id]
       if (thing.type === 'marker') {
@@ -16,6 +16,12 @@ const blobApp = state => {
   })
   
   return state
+}
+
+const blobApp = {
+  id: 9,
+  name: 'blobApp',
+  code,
 }
 
 module.exports = blobApp
