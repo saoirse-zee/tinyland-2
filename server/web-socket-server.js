@@ -48,8 +48,7 @@ const blobApp = state => {
     return state
 }
 
-let state = {
-}
+let state = {}
 
 udpPort.on('ready', function() {
     wss.on('connection', function connection(ws) {
@@ -72,10 +71,19 @@ udpPort.on('ready', function() {
             }
             
             // 2. Run apps
-            state = lineApp(state)
-            state = blobApp(state)
+            const activeMarkers = Object.keys(state)
+                .map(id => state[id])
+                .filter(things => things.type === 'marker')
+                .map(marker => marker.id)
 
-            console.log(state)
+            if (activeMarkers.includes(7)) {
+                state = lineApp(state)
+            }
+            if (activeMarkers.includes(9)) {
+                state = blobApp(state)
+            }
+
+            console.log(activeMarkers)
             console.log("=======")
 
     
