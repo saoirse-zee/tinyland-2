@@ -33,12 +33,17 @@ const lineApp = state => {
     return state
 }
 
-let state = {
-    'shape-1': {
-        type: 'shape',
-        x: 0.2,
-        y: 0.3,
+const blobApp = state => {
+    // do stuff with blobs
+    state['blob-1'] = {
+        id: 'blob-1',
+        type: 'blob',
+        data: [0.5, 0.5] // Put blob in center of Tinyland
     }
+    return state
+}
+
+let state = {
 }
 
 udpPort.on('ready', function() {
@@ -63,6 +68,7 @@ udpPort.on('ready', function() {
             
             // 2. Run apps
             state = lineApp(state)
+            state = blobApp(state)
 
             console.log(state)
             console.log("=======")
@@ -81,6 +87,13 @@ udpPort.on('ready', function() {
                 if (item.type === 'line') {
                     const msg = JSON.stringify({
                         type: 'line',
+                        payload: item
+                    })
+                    ws.send(msg)
+                }
+                if (item.type === 'blob') {
+                    const msg = JSON.stringify({
+                        type: 'blob',
                         payload: item
                     })
                     ws.send(msg)

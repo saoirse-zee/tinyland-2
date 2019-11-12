@@ -45,6 +45,17 @@ function App() {
                     return {...prevThings, ...newThing}
                 })
             }
+            if (data.type === 'blob') {
+                const {payload} = data
+                setThings((prevThings) => {
+                    const newThing = {}
+                    newThing[payload.id] = {
+                        type: 'blob',
+                        point: payload.data,
+                    }
+                    return {...prevThings, ...newThing}
+                })
+            }
         }
         ws.onopen = () => {
             console.log('Connection is open')
@@ -74,9 +85,11 @@ function App() {
                                             <Line key={id} points={thing.points.map(pt => pt.map((coord, i) => coord * (i === 0 ? 500 : 200)))} />
                                         )
                                     }
-                                //     return (
-                                //         <Blob key={id} x={thing.x * 500} y={thing.y * 200} />
-                                //     )
+                                    if (thing.type === 'blob') {
+                                        return (
+                                            <Blob key={id} x={thing.point[0] * 500} y={thing.point[1] * 200} />
+                                        )
+                                    }
                                 })
                             }
                         </Container>
