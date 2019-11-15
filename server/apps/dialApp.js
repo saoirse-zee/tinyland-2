@@ -15,7 +15,7 @@ const code = space => {
     appId,
     type: 'dial',
     point: [dialAppMarker.x, dialAppMarker.y],
-    angle: dialAppMarker.a
+    value: Math.round(dialAppMarker.a / (2 * Math.PI) * 100)
   }
   const nextVirtualObjects = {
     ...space.virtualObjects,

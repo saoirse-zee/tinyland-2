@@ -70,9 +70,9 @@ function App() {
                 ) : (
                     <div className="App">
                         <Container width={500} height={200}>
-                            <Dial x={0.2 * 500} y={0.4 * 200} angle={2.2 * Math.PI} />
+                            {/* <Dial x={0.2 * 500} y={0.4 * 200} value={120} /> */}
                             <text x="10" y="10" fill="white">{Object.keys(things).length} things</text>
-                            {/* {
+                            {
                                 Object.keys(things).map(id => {
                                     const thing = things[id]
                                     if (thing.type === 'line') {
@@ -87,11 +87,11 @@ function App() {
                                     }
                                     if (thing.type === 'dial') {
                                         return (
-                                            <Dial key={id} x={thing.point[0] * 500} y={thing.point[1] * 200} angle={thing.angle} />
+                                            <Dial key={id} x={thing.point[0] * 500} y={thing.point[1] * 200} value={thing.value} />
                                         )
                                     }
                                 })
-                            } */}
+                            }
                         </Container>
                         {message}
                     </div>

@@ -1,19 +1,16 @@
 import * as React from "react";
-import { useSpring, animated } from "react-spring";
 
 /**
  * 
- * @param {angle} expects angle in radians
+ * @param {value} expects value between 0 and 100
  */
-function Dial({ x, y, angle }) {
-  const pos = useSpring({ x, y });
-  const angleInDegrees = 180 + angle * (180 / Math.PI);
-  const dialValue = Math.round(angle / (2 * Math.PI)  * 100)
+function Dial({ x, y, value }) {
+  const angleInDegrees = 180 + value / 100 * 360;
   const radius = 20;
   return (
     <g transform={`translate(${x}, ${y})`}>
       <g transform={`rotate(${angleInDegrees})`}>
-        <animated.circle
+        <circle
           cx={0}
           cy={0}
           r={radius}
@@ -22,13 +19,14 @@ function Dial({ x, y, angle }) {
         />
         <line
           x1={0}
-          y1={0}
+          y1={radius}
           x2={0}
-          y2={40}
+          y2={radius * 1.5}
           stroke="white"
+          strokeWidth={3}
         />
       </g>
-      <text transform={`translate(${- radius / 2}, 5)`} fill="white">{dialValue}</text>
+      <text transform={`translate(${- radius / 2}, 5)`} fill="white">{value}</text>
     </g>
   );
 }

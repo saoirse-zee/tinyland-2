@@ -9,7 +9,7 @@ test('dial appears when dialApp is active', t => {
         id: 1,
         x: 0,
         y: 0,
-        a: 3,
+        a: 1, // dial is rotated 1 radian
       }
     }
   }
@@ -21,7 +21,7 @@ test('dial appears when dialApp is active', t => {
         appId: 1,
         type: 'dial',
         point: [0, 0],
-        angle: 3
+        value: 16 // 1 radian is 16% of 2 pi
       }
     },
     appMarkers: {
@@ -29,7 +29,7 @@ test('dial appears when dialApp is active', t => {
         id: 1,
         x: 0,
         y: 0,
-        a: 3,
+        a: 1,
       }
     }
   }

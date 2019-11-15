@@ -55,7 +55,7 @@ const appIds = [7, 9, 1]
 setInterval(() => {
     const x = Math.random()
     const y = Math.random()
-    const angle = 3
+    const angle = Math.random() * 2 * Math.PI
     const i = Math.round(Math.random() * (appIds.length - 1))
     const id = appIds[i]
     console.log(`sending: ${id}`)
