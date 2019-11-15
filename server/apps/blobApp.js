@@ -12,7 +12,7 @@ const code = state => {
         id: `blob-${markerId}`,
         appId,
         type: 'blob',
-        data: [marker.x, marker.y] // Put blob in center of marker
+        point: [marker.x, marker.y] // Put blob in center of marker
     }
   })
   

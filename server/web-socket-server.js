@@ -21,7 +21,7 @@ let state = {
   virtualObjects: {},
   appMarkers: {}
 };
-const MARKER_LIFETIME = Duration.fromObject({ seconds: 3 });
+const MARKER_LIFETIME = Duration.fromObject({ seconds: 1.5 });
 
 udpPort.on("ready", function() {
   wss.on("connection", function connection(ws) {
@@ -75,25 +75,11 @@ udpPort.on("ready", function() {
 
       // 3. Send state to React app to be rendered
       console.log("====");
-
-      Object.keys(state.virtualObjects).forEach(key => {
-        const item = state.virtualObjects[key];
-        console.log("item: ", item.id);
-        if (item.type === "line") {
-          const msg = JSON.stringify({
-            type: "line",
-            payload: item
-          });
-          ws.send(msg);
-        }
-        if (item.type === "blob") {
-          const msg = JSON.stringify({
-            type: "blob",
-            payload: item
-          });
-          ws.send(msg);
-        }
-      });
+      const msg = JSON.stringify({
+          type: 'render',
+          payload: state.virtualObjects
+      })
+      ws.send(msg)
     });
   });
 });

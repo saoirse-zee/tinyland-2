@@ -23,28 +23,32 @@ function App() {
             if (data.type === 'string') {
                 setMessage(data.payload)
             }
-            if (data.type === 'line') {
-                const {payload} = data
-                setThings((prevThings) => {
-                    const newThing = {}
-                    newThing[payload.id] = {
-                        type: 'line',
-                        points: payload.data,
-                    }
-                    return {...prevThings, ...newThing}
-                })
+            if (data.type === 'render') {
+                setThings(data.payload)
             }
-            if (data.type === 'blob') {
-                const {payload} = data
-                setThings((prevThings) => {
-                    const newThing = {}
-                    newThing[payload.id] = {
-                        type: 'blob',
-                        point: payload.data,
-                    }
-                    return {...prevThings, ...newThing}
-                })
-            }
+
+            // if (data.type === 'line') {
+            //     const {payload} = data
+            //     setThings((prevThings) => {
+            //         const newThing = {}
+            //         newThing[payload.id] = {
+            //             type: 'line',
+            //             points: payload.data,
+            //         }
+            //         return {...prevThings, ...newThing}
+            //     })
+            // }
+            // if (data.type === 'blob') {
+            //     const {payload} = data
+            //     setThings((prevThings) => {
+            //         const newThing = {}
+            //         newThing[payload.id] = {
+            //             type: 'blob',
+            //             point: payload.data,
+            //         }
+            //         return {...prevThings, ...newThing}
+            //     })
+            // }
         }
         ws.onopen = () => {
             console.log('Connection is open')
