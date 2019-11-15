@@ -3,8 +3,9 @@ const WebSocket = require("ws");
 const osc = require("osc");
 const blobApp = require("./apps/blobApp");
 const lineApp = require("./apps/lineApp");
+const dialApp = require("./apps/dialApp");
 
-const apps = [blobApp, lineApp];
+const apps = [blobApp, lineApp, dialApp];
 
 const WS_PORT = 1234;
 const OSC_PORT = 3333;
@@ -17,7 +18,7 @@ const udpPort = new osc.UDPPort({
   metadata: true
 });
 
-let state = {
+let space = {
   virtualObjects: {},
   appMarkers: {}
 };
@@ -40,14 +41,14 @@ udpPort.on("ready", function() {
     udpPort.on("bundle", function(bundle) {
       const appMarker = parseBundle(bundle);
       if (appMarker) {
-        state.appMarkers[appMarker.id] = {
+        space.appMarkers[appMarker.id] = {
           ...appMarker,
           deathDate: DateTime.local().plus(MARKER_LIFETIME)
         };
       }
 
       // 2. Run apps
-      const activeMarkers = Object.values(state.appMarkers).filter(
+      const activeMarkers = Object.values(space.appMarkers).filter(
         marker => marker.deathDate >= DateTime.local()
       ); // Deathdate must be in future to be alive
       const activeMarkerIds = activeMarkers.map(m => m.id);
@@ -55,31 +56,31 @@ udpPort.on("ready", function() {
         prev[curr.id] = curr;
         return prev;
       }, {});
-      state.appMarkers = newAppMarkers;
+      space.appMarkers = newAppMarkers;
 
       const activeApps = apps.filter(app => activeMarkerIds.includes(app.id));
       console.log("apps:");
       activeApps.forEach(a => console.log(a.name));
 
       // 2b. Clean up
-      Object.keys(state.virtualObjects).forEach(itemId => {
-        const item = state.virtualObjects[itemId];
+      Object.keys(space.virtualObjects).forEach(itemId => {
+        const item = space.virtualObjects[itemId];
         if (!activeMarkerIds.includes(item.appId)) {
-          delete state.virtualObjects[itemId];
+          delete space.virtualObjects[itemId];
         }
       });
 
       activeApps.forEach(app => {
-        state = app.code(state);
+        space = app.code(space);
       });
 
       // 3. Send state to React app to be rendered
       console.log("====");
-      const msg = JSON.stringify({
+      const renderMsg = JSON.stringify({
           type: 'render',
-          payload: state.virtualObjects
+          payload: space.virtualObjects
       })
-      ws.send(msg)
+      ws.send(renderMsg)
     });
   });
 });

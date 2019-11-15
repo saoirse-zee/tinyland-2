@@ -5,10 +5,10 @@
  */
 const appId = 9
 
-const code = state => {
-  Object.keys(state.appMarkers).forEach(markerId => {
-    const marker = state.appMarkers[markerId]
-    state.virtualObjects[`blob-${markerId}`] = {
+const code = space => {
+  Object.keys(space.appMarkers).forEach(markerId => {
+    const marker = space.appMarkers[markerId]
+    space.virtualObjects[`blob-${markerId}`] = {
         id: `blob-${markerId}`,
         appId,
         type: 'blob',
@@ -16,7 +16,7 @@ const code = state => {
     }
   })
   
-  return state
+  return space
 }
 
 const blobApp = {

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { HotKeys } from "react-hotkeys";
 import './App.css';
+import calibrationImage from './rectglr_calibration.png'
 import Container from './Container'
 import Blob from './Blob'
-import calibrationImage from './rectglr_calibration.png'
 import Line from "./Line";
+import Dial from "./Dial";
 
 const WebSocket = require('isomorphic-ws')
 
@@ -69,8 +70,9 @@ function App() {
                 ) : (
                     <div className="App">
                         <Container width={500} height={200}>
+                            <Dial x={0.2 * 500} y={0.4 * 200} angle={2.2 * Math.PI} />
                             <text x="10" y="10" fill="white">{Object.keys(things).length} things</text>
-                            {
+                            {/* {
                                 Object.keys(things).map(id => {
                                     const thing = things[id]
                                     if (thing.type === 'line') {
@@ -83,8 +85,13 @@ function App() {
                                             <Blob key={id} x={thing.point[0] * 500} y={thing.point[1] * 200} />
                                         )
                                     }
+                                    if (thing.type === 'dial') {
+                                        return (
+                                            <Dial key={id} x={thing.point[0] * 500} y={thing.point[1] * 200} angle={thing.angle} />
+                                        )
+                                    }
                                 })
-                            }
+                            } */}
                         </Container>
                         {message}
                     </div>

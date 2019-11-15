@@ -51,11 +51,11 @@ function sampleData(id, x, y, angle) {
 
 // udpPort.send(sampleData(9, 0, 0, 0), "127.0.0.1", 3333);
 
-const appIds = [33, 7, 9, 1, 1, 1]
+const appIds = [7, 9, 1]
 setInterval(() => {
     const x = Math.random()
     const y = Math.random()
-    const angle = 0
+    const angle = 3
     const i = Math.round(Math.random() * (appIds.length - 1))
     const id = appIds[i]
     console.log(`sending: ${id}`)
