@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { HotKeys } from "react-hotkeys";
 import './App.css';
+import calibrationImage from './rectglr_calibration.png'
 import Container from './Container'
 import Blob from './Blob'
-import calibrationImage from './rectglr_calibration.png'
 import Line from "./Line";
+import Dial from "./Dial";
 
 const WebSocket = require('isomorphic-ws')
 
@@ -23,39 +24,32 @@ function App() {
             if (data.type === 'string') {
                 setMessage(data.payload)
             }
-            if (data.type === 'shape') {
-                const {payload} = data
-                setThings((prevThings) => {
-                    const newThing = {}
-                    newThing[`noob-${payload.id}`] = {
-                        x: payload.x,
-                        y: payload.y,
-                    }
-                    return {...prevThings, ...newThing}
-                })
+            if (data.type === 'render') {
+                setThings(data.payload)
             }
-            if (data.type === 'line') {
-                const {payload} = data
-                setThings((prevThings) => {
-                    const newThing = {}
-                    newThing[payload.id] = {
-                        type: 'line',
-                        points: payload.data,
-                    }
-                    return {...prevThings, ...newThing}
-                })
-            }
-            if (data.type === 'blob') {
-                const {payload} = data
-                setThings((prevThings) => {
-                    const newThing = {}
-                    newThing[payload.id] = {
-                        type: 'blob',
-                        point: payload.data,
-                    }
-                    return {...prevThings, ...newThing}
-                })
-            }
+
+            // if (data.type === 'line') {
+            //     const {payload} = data
+            //     setThings((prevThings) => {
+            //         const newThing = {}
+            //         newThing[payload.id] = {
+            //             type: 'line',
+            //             points: payload.data,
+            //         }
+            //         return {...prevThings, ...newThing}
+            //     })
+            // }
+            // if (data.type === 'blob') {
+            //     const {payload} = data
+            //     setThings((prevThings) => {
+            //         const newThing = {}
+            //         newThing[payload.id] = {
+            //             type: 'blob',
+            //             point: payload.data,
+            //         }
+            //         return {...prevThings, ...newThing}
+            //     })
+            // }
         }
         ws.onopen = () => {
             console.log('Connection is open')
@@ -76,6 +70,7 @@ function App() {
                 ) : (
                     <div className="App">
                         <Container width={500} height={200}>
+                            {/* <Dial x={0.2 * 500} y={0.4 * 200} value={120} /> */}
                             <text x="10" y="10" fill="white">{Object.keys(things).length} things</text>
                             {
                                 Object.keys(things).map(id => {
@@ -87,7 +82,12 @@ function App() {
                                     }
                                     if (thing.type === 'blob') {
                                         return (
-                                            <Blob key={id} x={thing.point[0] * 500} y={thing.point[1] * 200} />
+                                            <Blob key={id} x={thing.point[0] * 500} y={thing.point[1] * 200} size={thing.size} />
+                                        )
+                                    }
+                                    if (thing.type === 'dial') {
+                                        return (
+                                            <Dial key={id} x={thing.point[0] * 500} y={thing.point[1] * 200} value={thing.value} />
                                         )
                                     }
                                 })

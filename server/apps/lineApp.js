@@ -3,28 +3,26 @@
  * ID: 7
  * Draws a line between "blobs"
  */
-const code = state => {
+const appId = 7
+const code = space => {
   // Map from shapes to sets of coords (that can later be fed to an svg.)
-  const lineCoords = Object.keys(state)
-      .map(id => {
-          const thing = state[id]
-          return thing
-      })
-      .filter(thing => thing.type === 'blob')
-      .map(blob => [blob.data[0], blob.data[1]])
+  const lineCoords = Object.values(space.virtualObjects)
+      .filter(virtualObject => virtualObject.type === 'blob')
+      .map(blob => [blob.point[0], blob.point[1]])
 
   // Add the new line to state
-  state['line-1'] = {
+  space.virtualObjects['line-1'] = {
       id: 'line-1',
+      appId,
       type: 'line',
-      data: lineCoords
+      points: lineCoords
   }
 
-  return state
+  return space
 }
 
 const lineApp = {
-  id: 7,
+  id: appId,
   name: 'lineApp',
   code,
 }
