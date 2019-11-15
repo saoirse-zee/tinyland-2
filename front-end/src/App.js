@@ -23,17 +23,6 @@ function App() {
             if (data.type === 'string') {
                 setMessage(data.payload)
             }
-            if (data.type === 'shape') {
-                const {payload} = data
-                setThings((prevThings) => {
-                    const newThing = {}
-                    newThing[`noob-${payload.id}`] = {
-                        x: payload.x,
-                        y: payload.y,
-                    }
-                    return {...prevThings, ...newThing}
-                })
-            }
             if (data.type === 'line') {
                 const {payload} = data
                 setThings((prevThings) => {

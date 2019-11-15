@@ -3,23 +3,24 @@
  * ID: 9
  * Draws a blob for each marker
  */
+const appId = 9
+
 const code = state => {
-  Object.keys(state).forEach(id => {
-      const thing = state[id]
-      if (thing.type === 'marker') {
-          state[`blob-${id}`] = {
-              id: `blob-${id}`,
-              type: 'blob',
-              data: [thing.x, thing.y] // Put blob in center of marker
-          }
-      }
+  Object.keys(state.appMarkers).forEach(markerId => {
+    const marker = state.appMarkers[markerId]
+    state.virtualObjects[`blob-${markerId}`] = {
+        id: `blob-${markerId}`,
+        appId,
+        type: 'blob',
+        data: [marker.x, marker.y] // Put blob in center of marker
+    }
   })
   
   return state
 }
 
 const blobApp = {
-  id: 9,
+  id: appId,
   name: 'blobApp',
   code,
 }
