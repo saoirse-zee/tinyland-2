@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useSpring, animated } from "react-spring";
 
-function Blob({ x, y }) {
+function Blob({ x, y, size }) {
   const pos = useSpring({ x, y });
   return (
     <g>
@@ -11,7 +11,7 @@ function Blob({ x, y }) {
       <animated.circle
         cx={pos.x}
         cy={pos.y}
-        r={10}
+        r={size}
         fill="white"
         opacity={0.8}
         filter="url(#blurMe)"

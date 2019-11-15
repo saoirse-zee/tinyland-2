@@ -82,7 +82,7 @@ function App() {
                                     }
                                     if (thing.type === 'blob') {
                                         return (
-                                            <Blob key={id} x={thing.point[0] * 500} y={thing.point[1] * 200} />
+                                            <Blob key={id} x={thing.point[0] * 500} y={thing.point[1] * 200} size={thing.size} />
                                         )
                                     }
                                     if (thing.type === 'dial') {
