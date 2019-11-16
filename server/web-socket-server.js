@@ -22,7 +22,7 @@ let space = {
   virtualObjects: {},
   appMarkers: {}
 };
-const MARKER_LIFETIME = Duration.fromObject({ seconds: 1.5 });
+const MARKER_LIFETIME = Duration.fromObject({ seconds: 3 });
 
 udpPort.on("ready", function() {
   wss.on("connection", function connection(ws) {
