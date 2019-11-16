@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "ava",
-    "test:watch": "ava --watch"
+    "test:watch": "ava --watch",
+    "start": "node web-socket-server.js",
+    "demo": "node demo-osc-sender.js"
   },
   "author": "",
   "license": "ISC",

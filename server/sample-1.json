@@ -1,5 +1,0 @@
-{ address: '/tuio/2Dobj', args: [ { type: 's', value: 'alive' } ] }
-{
-  address: '/tuio/2Dobj',
-  args: [ { type: 's', value: 'fseq' }, { type: 'i', value: -1 } ]
-}
