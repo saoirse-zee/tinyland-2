@@ -10,12 +10,18 @@ const code = space => {
   const dialValue = dial && dial.value
   const size = dialValue | 10
   Object.keys(space.appMarkers).forEach(markerId => {
+    const people = Object.values(space.people)
     const marker = space.appMarkers[markerId]
+    const x = marker.x
+    const y = people.length > 0
+      ? 0.9
+      : marker.y
+    
     space.virtualObjects[`blob-${markerId}`] = {
         id: `blob-${markerId}`,
         appId,
         type: 'blob',
-        point: [marker.x, marker.y], // Put blob in center of marker
+        point: [x, y],
         size,
     }
   })

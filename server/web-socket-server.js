@@ -1,6 +1,7 @@
 const { DateTime, Duration } = require("luxon");
 const WebSocket = require("ws");
 const osc = require("osc");
+const parseBundle = require("./utils/parseBundle");
 const blobApp = require("./apps/blobApp");
 const lineApp = require("./apps/lineApp");
 const dialApp = require("./apps/dialApp");
@@ -20,7 +21,8 @@ const udpPort = new osc.UDPPort({
 
 let space = {
   virtualObjects: {},
-  appMarkers: {}
+  appMarkers: {},
+  people: {}
 };
 const MARKER_LIFETIME = Duration.fromObject({ seconds: 3 });
 
@@ -39,14 +41,21 @@ udpPort.on("ready", function() {
 
     // 1. Receive bundles of data about the physical world
     udpPort.on("bundle", function(bundle) {
-      const appMarker = parseBundle(bundle);
-      if (appMarker) {
-        space.appMarkers[appMarker.id] = {
-          ...appMarker,
+      const thing = parseBundle(bundle);
+      if (thing && thing.type === 'marker') {
+        space.appMarkers[thing.id] = {
+          ...thing,
           deathDate: DateTime.local().plus(MARKER_LIFETIME)
         };
       }
 
+      if (thing && thing.type === 'person') {
+        space.people[thing.id] = {
+          ...thing,
+          deathDate: DateTime.local().plus(MARKER_LIFETIME)
+        }
+      }
+      
       // 2. Run apps
       const activeMarkers = Object.values(space.appMarkers).filter(
         marker => marker.deathDate >= DateTime.local()
@@ -58,9 +67,17 @@ udpPort.on("ready", function() {
       }, {});
       space.appMarkers = newAppMarkers;
 
+      // Does this work? if so, could we do it for the apps 👆🏻
+      const newPeople = Object.values(space.people)
+        .filter(person => person.deathDate >= DateTime.local())
+      space.people = newPeople
+
       const activeApps = apps.filter(app => activeMarkerIds.includes(app.id));
       console.log("apps:");
       activeApps.forEach(a => console.log(a.name));
+      const people = Object.values(space.people)
+      console.log("people:");
+      people.forEach(person => console.log(person.id))
 
       // 2b. Clean up
       Object.keys(space.virtualObjects).forEach(itemId => {
@@ -91,27 +108,3 @@ udpPort.on("error", function(err) {
 });
 
 udpPort.open();
-
-function parseBundle(bundle) {
-  const marker = {};
-  if (isMarker()) {
-    // See TUIO docs to make sense of these args
-    // http://www.tuio.org/?specification
-    // /tuio/2Dobj set s i x y a X Y A m r
-    //     index     0 1 2 3 4 5 6 7 8 9 10
-    marker.id = bundle.packets[2].args[2].value;
-    marker.x = bundle.packets[2].args[3].value;
-    marker.y = bundle.packets[2].args[4].value;
-    marker.a = bundle.packets[2].args[5].value;
-  }
-  function isMarker() {
-    // All of this checking seems silly. Better way?
-    return (
-      bundle.packets &&
-      bundle.packets.length > 0 &&
-      bundle.packets[2] &&
-      bundle.packets[2].args[0].value === "set"
-    );
-  }
-  return marker.hasOwnProperty("id") && marker;
-}

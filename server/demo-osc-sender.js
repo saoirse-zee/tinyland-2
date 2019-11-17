@@ -2,7 +2,7 @@ const osc = require("osc")
 
 const udpPort = new osc.UDPPort({
     localAddress: "127.0.0.1",
-    localPort: 20002,
+    localPort: 20003,
     metadata: true,
 })
 
@@ -51,7 +51,7 @@ function sampleData(id, x, y, angle) {
 
 // udpPort.send(sampleData(9, 0, 0, 0), "127.0.0.1", 3333);
 
-const appIds = [7, 9, 1]
+const appIds = [2, 3, 4, 9, 9, 9]
 setInterval(() => {
     const x = Math.random()
     const y = Math.random()
